@@ -18,4 +18,4 @@ export function appState(state = initialState, action) {
 
 export default combineReducers({
    appState
-})
+});
