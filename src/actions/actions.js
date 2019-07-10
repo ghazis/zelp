@@ -1,16 +1,22 @@
-export function setButtonToggled(button_toggled) {
+export function setLocation(location) {
 	return {
-		type: 'BUTTON_TOGGLED',
-		button_toggled: button_toggled
+		type: 'LOCATION_SET',
+		location: location
 	};
 }
 
-export function determineButtonToggled(current_toggle) {
-	return (dispatch, getState) => {
-		if (current_toggle=="On") {
-			dispatch(setButtonToggled("Off"))
-		} else {
-			dispatch(setButtonToggled("On"));
-		}
+function setResults(results) {
+	return {
+		type: 'RESULTS_SET',
+		results: results
+	};
+}
+
+export function getZelpReviews(location) {
+	return dispatch => {
+		if (location)
+			fetch('http://localhost:3000/zelp?location='+location)
+				.then(response => response.json())
+				.then(results=>dispatch(setResults(results)));
 	}
 }

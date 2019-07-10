@@ -1,15 +1,49 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { determineButtonToggled } from './actions/actions';
+import { getZelpReviews, setLocation } from './actions/actions';
 
 class App extends React.Component {
 
   render() {
+    const Row = ({row}) => (
+      <tr>
+        <td>{row.name}</td>
+        <td>{row.rating}</td>
+        <td>{row.review_count}</td>
+        <td>{row.phone}</td>
+        <td>{row.address}</td>
+        <td>{row.url}</td>
+      </tr>
+    )
+
     return (
       <div>
         <div className="title">Zelp</div>
-      	<button onClick={() => {this.props.determineButtonToggled(this.props.appState.button_toggled)}}>{this.props.appState.button_toggled}</button>
+        <form onSubmit={e => {
+          e.preventDefault();
+          this.props.getZelpReviews(this.props.location);
+        }}>
+          <input placeholder="Enter City or Address" onChange={(e)=>this.props.setLocation(e.target.value)}/>
+        	<button>Search</button>
+        </form>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Rating</th>
+              <th>Reviews</th>
+              <th>Phone</th>
+              <th>Address</th>
+              <th>URL</th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.props.results.map((result, index) =>{
+              return <Row key={index} row={result} />;
+            })}
+          </tbody>
+        </table>
       </div>
     );
   }
@@ -17,13 +51,15 @@ class App extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    appState: state.appState
+    location: state.appState.location,
+    results: state.appState.results
   };
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    determineButtonToggled: (button_toggled) => dispatch(determineButtonToggled(button_toggled))
+    setLocation: (location) => dispatch(setLocation(location)),
+    getZelpReviews: (location) => dispatch(getZelpReviews(location))
   };
 }
 
