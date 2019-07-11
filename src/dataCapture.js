@@ -13,13 +13,14 @@ async function getZRestaurants(location) {
    var br = await new webdriver.Builder().forBrowser('chrome').setChromeOptions(options).build();
    try {
       await br.get('https://www.zabihah.com/search?k=&l='+location);
-      var table = await br.findElement(webdriver.By.xpath('/html/body/table[1]/tbody/tr/td[1]/table[13]/tbody/tr/td/table'));
+      try       {var table = await br.findElement(webdriver.By.xpath('/html/body/table[1]/tbody/tr/td[1]/table[13]/tbody/tr/td/table'))}
+      catch (e) {var table = await br.findElement(webdriver.By.xpath('/html/body/table[1]/tbody/tr/td[1]/table[11]/tbody/tr/td/table'))}
       var rows = await table.findElements(webdriver.By.tagName('tr'));
 
       for (row in rows) {
          restaurant = {};
          columns = await rows[row].findElements(webdriver.By.tagName('td'));
-         if (columns.length < 5) {
+         if (columns.length < 5 && columns.length > 0) {
             var lines = (await columns[2].getText()).split('\n');
             restaurant['name'] = lines[0];
             restaurant['address'] = lines[1];
@@ -42,7 +43,9 @@ function getYelpRating(place, location) {
 
       request(options, (err, resp, body)=>{
          var results = JSON.parse(body);
-         if (results['businesses'].length) {
+         if (Object.keys(results).includes('error')) {
+            resolve({error: results['error']['description']});
+         } else if (results['businesses'].length) {
            var found = results['businesses'][0];
            resolve({
                id: found['id'],
@@ -63,7 +66,6 @@ function getYelpRating(place, location) {
 async function getZRestsMap(location) {
    var z_rests_map = [];
    var z_rests = await getZRestaurants(location);
-   //var z_rests = [{"cuisine": "SOUTH AFRICAN and CARIBBEAN", "name": "Spice Bcn", "address": "39 Carrer d'Amig, Barcelona, Catalunya"}, {"cuisine": "TURKISH", "name": "Dner Kebab Cafeteria", "address": "6 Plaa de les Corts, Barcelona, Catalunya"}, {"cuisine": "LEBANESE", "name": "Liban", "address": "29 Carrer de l Equador, Barcelona, Catalunya"}, {"cuisine": "LEBANESE", "name": "Abou Khalil", "address": "88 Carrer de Santal, Barcelona, Catalunya"}, {"cuisine": "MEDITERRANEAN and MIDDLE EASTERN", "name": "Habibi Caf", "address": "220 Carrer de Balmes, Barcelona, Catalunya"}, {"cuisine": "INDONESIAN and MALAY", "name": "Restaurant Malaysia", "address": "8 Carrer de Laforja, Barcelona, Catalunya"}];
    var promises = [];
 
    for (var rest of z_rests) {

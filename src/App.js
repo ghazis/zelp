@@ -15,18 +15,9 @@ class App extends React.Component {
         <td>{row.address}</td>
         <td><a href={row.url} target="_blank">Yelp Reviews</a></td>
       </tr>
-    )
+    );
 
-    return (
-      <div>
-        <div className="title">Zelp</div>
-        <form onSubmit={e => {
-          e.preventDefault();
-          this.props.getZelpReviews(this.props.location);
-        }}>
-          <input placeholder="Enter City or Address" onChange={(e)=>this.props.setLocation(e.target.value)}/>
-        	<button>Search</button>
-        </form>
+    const Tb = ({data}) => (
         <table>
           <thead>
             <tr>
@@ -39,11 +30,28 @@ class App extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {this.props.results.map((result, index) =>{
+            {data.map((result, index) =>{
               return <Row key={index} row={result} />;
             })}
           </tbody>
         </table>
+    );
+
+    this.results = typeof this.props.results === 'string' ?
+      <div>{this.props.results}</div> :
+      <Tb data={this.props.results} />
+
+    return (
+      <div>
+        <div className="title">Zelp</div>
+        <form onSubmit={e => {
+          e.preventDefault();
+          this.props.getZelpReviews(this.props.location);
+        }}>
+          <input placeholder="Enter City or Address" onChange={(e)=>this.props.setLocation(e.target.value)}/>
+        	<button>Search</button>
+        </form>
+        {this.results}
       </div>
     );
   }

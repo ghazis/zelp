@@ -17,6 +17,15 @@ export function getZelpReviews(location) {
 		if (location)
 			fetch('http://localhost:3000/zelp?location='+location)
 				.then(response => response.json())
-				.then(results=>dispatch(setResults(results)));
+				.then(results=>{
+					var error;
+					results.map(result=>{
+						if (Object.keys(result).includes('error')) {
+							error = result['error'];
+						}
+					})
+					results = error ? error : results;
+					dispatch(setResults(results));
+			});
 	}
 }
