@@ -27,6 +27,7 @@
     "sass-loader": "^7.1.0",
     "selenium-webdriver": "^4.0.0-alpha.4",
     "style-loader": "^0.23.1",
+    "url-loader": "^2.0.1",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.1",
     "webpack-dev-server": "^3.1.4"

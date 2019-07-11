@@ -49,11 +49,14 @@ class App extends React.Component {
           e.preventDefault();
           this.props.getZelpReviews(this.props.location);
         }}>
-          <Autocomplete
-            onPlaceSelected={e => this.props.setLocation(e.formatted_address)}
-            types={['address']}
-          />
-        	<button>Search</button>
+          <div className="fields-layout">
+            <Autocomplete
+              onPlaceSelected={e => this.props.setLocation(e.formatted_address)}
+              types={['address']}
+            />
+          	<button disabled={this.props.isLoading}>Search</button>
+            { this.props.isLoading ? <img className="loading-spinner" src={require('./icons/spinner.gif')} /> : null}
+          </div>
         </form>
         {this.results}
       </div>
@@ -63,6 +66,7 @@ class App extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
+    isLoading: state.appState.isLoading,
     location: state.appState.location,
     results: state.appState.results
   };
