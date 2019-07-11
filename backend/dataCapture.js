@@ -1,6 +1,8 @@
 var request = require('request');
 var webdriver = require('selenium-webdriver');
 var chrome = require('selenium-webdriver/chrome');
+var chromedriver = require('chromedriver');
+
 var logging_prefs = new webdriver.logging.Preferences();
 logging_prefs.setLevel(webdriver.logging.Type.BROWSER, webdriver.logging.Level.OFF);
 var options = new chrome.Options().windowSize({height:1200,width:1900}).headless().setLoggingPrefs(logging_prefs);

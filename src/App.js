@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Autocomplete from 'react-google-autocomplete';
 
 import { getZelpReviews, setLocation } from './actions/actions';
 
@@ -48,7 +49,10 @@ class App extends React.Component {
           e.preventDefault();
           this.props.getZelpReviews(this.props.location);
         }}>
-          <input placeholder="Enter City or Address" onChange={(e)=>this.props.setLocation(e.target.value)}/>
+          <Autocomplete
+            onPlaceSelected={e => this.props.setLocation(e.formatted_address)}
+            types={['address']}
+          />
         	<button>Search</button>
         </form>
         {this.results}

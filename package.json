@@ -32,6 +32,8 @@
     "webpack-dev-server": "^3.1.4"
   },
   "dependencies": {
-    "cors": "^2.8.5"
+    "chromedriver": "^73.0.0",
+    "cors": "^2.8.5",
+    "react-google-autocomplete": "^1.1.0"
   }
 }
