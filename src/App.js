@@ -13,7 +13,7 @@ class App extends React.Component {
         <td>{row.review_count}</td>
         <td>{row.phone}</td>
         <td>{row.address}</td>
-        <td>{row.url}</td>
+        <td><a href={row.url} target="_blank">Yelp Reviews</a></td>
       </tr>
     )
 
